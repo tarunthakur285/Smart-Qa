@@ -1,0 +1,60 @@
+# === Node.js (backend and frontend) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# === Logs ===
+logs
+*.log
+log.txt
+*.out
+
+# === Runtime data ===
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# === Environment variables ===
+.env
+.env.*.local
+
+# === OS-specific files ===
+.DS_Store
+Thumbs.db
+
+# === Frontend build files ===
+client/build/
+client/.next/        # if using Next.js instead of CRA
+client/.parcel-cache # if using Parcel
+client/dist/
+
+# === Backend build files ===
+server/dist/
+server/build/
+
+# === Coverage reports ===
+coverage/
+*.lcov
+
+# === IDE / Editor folders ===
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# === Misc ===
+*.tgz
+*.tar.gz
+
+# === Optional: Ignore test results or artifacts ===
+jest-html-reporters-*.html
+test-results/
+
+# === Optional: Ignore MongoDB local data ===
+data/db/
+dump/
