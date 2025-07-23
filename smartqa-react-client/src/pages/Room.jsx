@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
+import Question from "./Question";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { serverEndpoint } from "../config/appConfig";
 import socket from "../config/socket";
-import Question from "./Question";
 
 function Room() {
     const { code } = useParams();
@@ -11,17 +11,17 @@ function Room() {
     const [errors, setErrors] = useState({});
     const [room, setRoom] = useState(null);
     const [questions, setQuestions] = useState([]);
-    const[topQuestions, setTopQuestions] = useState([]);
+    const [topQuestions, setTopQuestions] = useState([]);
 
     const fetchTopQuestions = async () => {
         try {
-            const response = await axios.get(`${serverEndpoint}/room/${code}/top-question`, {
+            const response = await axios.get(`${serverEndpoint}/room/${code}/top-questions`, {
                 withCredentials: true
             });
             setTopQuestions(response.data || []);
         } catch (error) {
             console.log(error);
-            setErrors({ message: "Unable to fetch top questions, please try again" });
+            setErrors({ message: 'Unable to fetch top questions' });
         }
     };
 
@@ -33,7 +33,7 @@ function Room() {
             setRoom(response.data);
         } catch (error) {
             console.log(error);
-            setErrors({ message: "Unable to fetch room details, please try again" });
+            setErrors({ message: 'Unable to fetch room details, please try again' });
         }
     };
 
@@ -45,7 +45,7 @@ function Room() {
             setQuestions(response.data);
         } catch (error) {
             console.log(error);
-            setErrors({ message: "Unable to fetch questions, please try again" });
+            setErrors({ message: 'Unable to fetch questions, please try again' });
         }
     };
 
@@ -59,21 +59,17 @@ function Room() {
 
         fetchData();
 
-        // Join socket room
         socket.emit("join-room", code);
 
-        // Listen for new questions
         socket.on("new-question", (question) => {
             setQuestions((prev) => [question, ...prev]);
         });
 
-        // Cleanup on unmount
         return () => {
             socket.off("new-question");
         };
     }, []);
 
-    // Show loading state
     if (loading) {
         return (
             <div className="container text-center py-5">
@@ -83,12 +79,11 @@ function Room() {
         );
     }
 
-    // Show error state
     if (errors.message) {
         return (
             <div className="container text-center py-5">
                 <h3>Error!</h3>
-                <p>{errors.message}</p>
+                <p>errors.message</p>
             </div>
         );
     }
@@ -104,14 +99,13 @@ function Room() {
                 <div className="mt-2">
                     <h5>Top Questions</h5>
                     <ul>
-                        {topQuestions.map((question,index) => (
+                        {topQuestions.map((question, index) => (
                             <li key={index}>{question}</li>
                         ))}
                     </ul>
-                    </div>
+                </div>
             )}
-
-            <div className="row mb-4">
+            <div className="row">
                 <div className="col-auto">
                     <ul className="list-group">
                         {questions.map((ques) => (
@@ -122,7 +116,6 @@ function Room() {
                     </ul>
                 </div>
             </div>
-
             <div className="row">
                 <Question roomCode={code} />
             </div>

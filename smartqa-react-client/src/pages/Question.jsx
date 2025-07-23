@@ -10,7 +10,7 @@ function Question({ roomCode }) {
         const newErrors = {};
         let isValid = true;
 
-        if (!question.trim()) {
+        if (question.length === 0) {
             isValid = false;
             newErrors.question = "Question is mandatory";
         }
@@ -22,20 +22,25 @@ function Question({ roomCode }) {
     const handleSubmit = async () => {
         if (validate()) {
             try {
-                const participantName = localStorage.getItem("participant-name");
+                const participantName =
+                    localStorage.getItem("participant-name");
                 const response = await axios.post(
-                   `${serverEndpoint}/room/${roomCode}/question`,
+                    `${serverEndpoint}/room/${roomCode}/question`,
                     {
                         content: question,
-                        user: participantName || "Anonymous",
+                        user: participantName ? participantName : "Anonymous",
                     },
-                    { withCredentials: true }
+                    {
+                        withCredentials: true,
+                    }
                 );
                 console.log(response);
                 setQuestion("");
             } catch (error) {
-                console.error(error);
-                setErrors({ message: "Error posting question, please try again" });
+                console.log(error);
+                setErrors({
+                    message: "Error posting question, please try again",
+                });
             }
         }
     };
@@ -48,7 +53,11 @@ function Question({ roomCode }) {
                     <textarea
                         id="question"
                         name="question"
-                        className={errors.question ? "form-control is-invalid" : "form-control"}
+                        className={
+                            errors.question
+                                ? "form-control is-invalid"
+                                : "form-control"
+                        }
                         rows="3"
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
@@ -59,7 +68,7 @@ function Question({ roomCode }) {
                 <div className="mb-3">
                     <button
                         type="button"
-                        onClick={handleSubmit}
+                        onClick={() => handleSubmit()}
                         className="btn btn-primary w-100"
                     >
                         Submit
